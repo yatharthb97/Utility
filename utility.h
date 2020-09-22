@@ -3,8 +3,7 @@
 
 
 #define __OUT_PRECISION__ 16
-
-
+#define __PROGRESSBAR_MAX_CHAR__ 64
 namespace Utility
 {
 
@@ -198,14 +197,15 @@ namespace Utility
 		
 	}
 
-
+	//10
 	inline void AnyKeyPress()
 	{
 		std::cin.get();
 		cin.sync(); //Clear std::in Buffer
-	}
+	} //End of AnyKeyPress()
 
-	inline bool YN()
+	//11
+	inline bool YN(bool recursive = true)
 	{
 		std::cout << "Press Y to accept and N to reject." << std::endl;
 		char t = std::cin.get();
@@ -225,12 +225,79 @@ namespace Utility
 		{
 			//*** Recursive State
 			std::cout << "Invalid Character Entry!" << std::endl;
-			YN();	
+			if(recursive)
+				YN();	
 		}
 		
 	} //End of YN()
 
 
+	//12
+	inline const char* ProgressBar(double progress, int CharSet = __PROGRESSBAR_MAX_CHAR__)
+	{
+		double norm_prog = Utility::Percentage(progress,100);
+		int ReduCharSet = CharSet - 14;
+		int done = norm_prog; //Implicit Cast
+		done = done/100*ReduCharSet;
+		int left = ReduCharSet - done;
+		
+		
+		left = left/100*ReduCharSet;
+
+		assert(done+left = ReduCharSet);
+		
+		std::string out;
+		out.reserve(CharSet); //<<|(##########>...............)|>> nn%
+		//8 -> Margins + 5-> Percentage Display
+
+
+		string::iterator front = out.begin();
+		string::iterator end = out.begin() + 4;
+		std::fill(front, end, "<<|(");
+
+		front += 4;
+		end = end + done - 1;
+		std::fill(front, end, '#');
+
+		front++;
+		end++;
+		std::fill(front, end, '>');
+
+		front++;
+		end = end+1+done;
+		std::fill(front, end, '.');
+
+		front = end;
+		end +=5;
+		std::fill(front, end, ")|>> ");
+
+		if(norm_prog < 100)
+		{
+			*end = " ";
+			 end++;
+		}
+
+		std::fill(end, out.end()-2, norm_prog);
+		*(out.end()-1) = '%';
+
+
+		return out.c_str();
+	}
+
+
+	//13
+
+	inline double Percentage(double quantity, double max)
+	{
+		if(quantity <= 1.0)
+			return quantity*max;
+
+		else
+			return quantity/max * 100;
+
+	}
+
 }; //End of namespace Utility
 
 #undef __OUT_PRECISION__
+#undef __PROGRESSBAR_MAX_CHAR__
