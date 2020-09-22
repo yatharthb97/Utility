@@ -10,15 +10,23 @@ class Timer
 public:
 
 	std::chrono::time_point<std::chrono::high_resolution_clock> stamp_time;
-	std::string key;
+	const char* key;
 
 	//Constructor
-	Timer(std::string key =""): key(key)
+	Timer(const char* key =""): key(key)
 	{
 		std::cerr << "Timer Object: " << key << std::endl;
 		stamp_time = std::chrono::high_resolution_clock::now();
 	}
 
+
+	//Constructor
+	Timer(std::string key)
+	{
+		this->key = key.c_str();
+		std::cerr << "Timer Object: " << key << std::endl;
+		stamp_time = std::chrono::high_resolution_clock::now();
+	}
 
 	~Timer()
 	{
