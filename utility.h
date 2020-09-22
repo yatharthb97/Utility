@@ -1,6 +1,6 @@
 #pragma once
 #include <sstream>
-
+#include <assert.h>
 
 #define __OUT_PRECISION__ 16
 #define __PROGRESSBAR_MAX_CHAR__ 64
@@ -244,7 +244,7 @@ namespace Utility
 		
 		left = left/100*ReduCharSet;
 
-		assert(done+left = ReduCharSet);
+		assert(done + left = ReduCharSet);
 		
 		std::string out;
 		out.reserve(CharSet); //<<|(##########>...............)|>> nn%
@@ -253,7 +253,7 @@ namespace Utility
 
 		string::iterator front = out.begin();
 		string::iterator end = out.begin() + 4;
-		std::fill(front, end, "<<|(");
+		std::fill(front, end,  "<<|(");
 
 		front += 4;
 		end = end + done - 1;
@@ -264,11 +264,11 @@ namespace Utility
 		std::fill(front, end, '>');
 
 		front++;
-		end = end+1+done;
+		end = end + 1 + done;
 		std::fill(front, end, '.');
 
 		front = end;
-		end +=5;
+		end += 5;
 		std::fill(front, end, ")|>> ");
 
 		if(norm_prog < 100)
@@ -277,8 +277,11 @@ namespace Utility
 			 end++;
 		}
 
-		std::fill(end, out.end()-2, norm_prog);
-		*(out.end()-1) = '%';
+		else
+			end++;
+
+		std::fill(end, out.end() - 2, norm_prog);
+		*(out.end() - 1) = '%';
 
 
 		return out.c_str();
